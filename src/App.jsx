@@ -1,17 +1,25 @@
 import { useState } from "react";
+import Filter from "./Filter";
+import PersonForm from "./PersonForm";
+import Persons from "./Persons";
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
+  const [persons, setPersons] = useState([
+    { name: "Arto Hellas", number: "123-456-7890" },
+  ]);
   const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
+  const [filterName, setFilterName] = useState("");
 
   const nameInput = (event) => {
     event.preventDefault();
-    if (newName.trim() !== "") {
+    if (newName.trim() !== "" && newNumber.trim() !== "") {
       if (persons.some((person) => person.name === newName)) {
         alert(`${newName} is already added to phonebook`);
       } else {
-        setPersons([...persons, { name: newName }]);
+        setPersons([...persons, { name: newName, number: newNumber }]);
         setNewName("");
+        setNewNumber("");
       }
     }
   };
@@ -20,23 +28,32 @@ const App = () => {
     setNewName(event.target.value);
   };
 
+  const addNumber = (event) => {
+    setNewNumber(event.target.value);
+  };
+
+  const filterNames = (event) => {
+    setFilterName(event.target.value);
+  };
+
+  const personsToShow = persons.filter((person) =>
+    person.name.toLowerCase().includes(filterName.toLowerCase().trim())
+  );
+
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={nameInput}>
-        <div>
-          name: <input value={newName} onChange={addName} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <Filter filterName={filterName} filterNames={filterNames} />
+      <h2>Add New</h2>
+      <PersonForm
+        newName={newName}
+        newNumber={newNumber}
+        addName={addName}
+        addNumber={addNumber}
+        nameInput={nameInput}
+      />
       <h2>Numbers</h2>
-      <ul>
-        {persons.map((person, index) => (
-          <li key={index}>{person.name}</li>
-        ))}
-      </ul>
+      <Persons personsToShow={personsToShow} />
     </div>
   );
 };
