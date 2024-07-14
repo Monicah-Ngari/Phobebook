@@ -2,19 +2,16 @@ import React, { useState, useEffect } from "react";
 import Filter from "./Filter";
 import PersonForm from "./PersonForm";
 import Persons from "./Persons";
-import notesManager from "./services/note";
-import axios from "axios";
+import notesManager from "./services/note"; // Changed import to match the example service pattern
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "123-456-7890" },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterName, setFilterName] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:5173/persons").then((response) => {
+    notesManager.getAll().then((response) => {
       console.log("promise fulfilled", response.data);
       setPersons(response.data);
     });
@@ -26,9 +23,12 @@ const App = () => {
       if (persons.some((person) => person.name === newName)) {
         alert(`${newName} is already added to phonebook`);
       } else {
-        setPersons([...persons, { name: newName, number: newNumber }]);
-        setNewName("");
-        setNewNumber("");
+        const newPerson = { name: newName, number: newNumber };
+        notesManager.create(newPerson).then((response) => {
+          setPersons(persons.concat(response.data));
+          setNewName("");
+          setNewNumber("");
+        });
       }
     }
   };
