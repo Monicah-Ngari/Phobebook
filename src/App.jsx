@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Filter from "./Filter";
 import PersonForm from "./PersonForm";
 import Persons from "./Persons";
+import notesManager from "./services/note";
 import axios from "axios";
 
 const App = () => {
@@ -13,10 +14,9 @@ const App = () => {
   const [filterName, setFilterName] = useState("");
 
   useEffect(() => {
-    console.log("effect");
-    axios.get("http://localhost:5173/").then((response) => {
-      console.log("promise fulfilled");
-      setNewName(response.data);
+    axios.get("http://localhost:5173/persons").then((response) => {
+      console.log("promise fulfilled", response.data);
+      setPersons(response.data);
     });
   }, []);
 
@@ -45,9 +45,11 @@ const App = () => {
     setFilterName(event.target.value);
   };
 
-  const personsToShow = persons.filter((person) =>
-    person.name.toLowerCase().includes(filterName.toLowerCase().trim())
-  );
+  const personsToShow = Array.isArray(persons)
+    ? persons.filter((person) =>
+        person.name.toLowerCase().includes(filterName.toLowerCase().trim())
+      )
+    : [];
 
   return (
     <div>
