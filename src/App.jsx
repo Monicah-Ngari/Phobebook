@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Filter from "./Filter";
 import PersonForm from "./PersonForm";
 import Persons from "./Persons";
-import notesManager from "./services/note"; // Changed import to match the example service pattern
+import notesManager from "./services/note";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -11,10 +11,19 @@ const App = () => {
   const [filterName, setFilterName] = useState("");
 
   useEffect(() => {
-    notesManager.getAll().then((response) => {
-      console.log("promise fulfilled", response.data);
-      setPersons(response.data);
-    });
+    notesManager
+      .getAll()
+      .then((response) => {
+        console.log("API Response:", response.data);
+        if (Array.isArray(response.data)) {
+          setPersons(response.data);
+        } else {
+          console.error("Unexpected response format: ", response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      });
   }, []);
 
   const nameInput = (event) => {
@@ -24,12 +33,29 @@ const App = () => {
         alert(`${newName} is already added to phonebook`);
       } else {
         const newPerson = { name: newName, number: newNumber };
-        notesManager.create(newPerson).then((response) => {
-          setPersons(persons.concat(response.data));
-          setNewName("");
-          setNewNumber("");
-        });
+        notesManager
+          .create(newPerson)
+          .then((response) => {
+            setPersons(persons.concat(response.data));
+            setNewName("");
+            setNewNumber("");
+          })
+          .catch((error) => {
+            console.error("Error adding person: ", error);
+          });
       }
+    }
+  };
+
+  const handleDelete = (id) => {
+    const confirmed = window.confirm("Are you sure you want to delete?");
+    if (confirmed) {
+      notesManager
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter((person) => person.id !== id));
+        })
+        .catch((error) => console.error("Error deleting contact:", error));
     }
   };
 
@@ -64,7 +90,7 @@ const App = () => {
         nameInput={nameInput}
       />
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow} />
+      <Persons personsToShow={personsToShow} handleDelete={handleDelete} />
     </div>
   );
 };
