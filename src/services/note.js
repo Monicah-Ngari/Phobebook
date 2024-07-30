@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:5173/api/notes";
+const baseUrl = "http://localhost:3001/persons";
+console.log("Base URL:", baseUrl);
 
 const getAll = () => {
   console.log("Fetching all data from:", baseUrl);
@@ -22,4 +23,5 @@ const remove = (id) => {
   return axios.delete(`${baseUrl}/${id}`);
 };
 
+// Export the API methods
 export default { getAll, create, update, remove };
