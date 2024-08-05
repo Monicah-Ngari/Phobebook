@@ -18,19 +18,39 @@ const App = () => {
         if (Array.isArray(response.data)) {
           setPersons(response.data);
         } else {
-          console.error("Unexpected response format: ", response.data);
+          console.log("Unexpected response format: ", response.data);
         }
       })
       .catch((error) => {
-        console.error("Error fetching data: ", error);
+        console.log("Error fetching data: ", error);
       });
   }, []);
 
   const nameInput = (event) => {
     event.preventDefault();
+    const alreadyExist = persons.find((person) => person.name === newName);
+
     if (newName.trim() !== "" && newNumber.trim() !== "") {
-      if (persons.some((person) => person.name === newName)) {
-        alert(`${newName} is already added to phonebook`);
+      if (alreadyExist) {
+        const confirmed = window.confirm(
+          `${newName} is already added to the phonebook, replace the old number with the new one?`
+        );
+        if (confirmed) {
+          notesManager
+            .update(alreadyExist.id, { ...alreadyExist, number: newNumber })
+            .then((response) => {
+              setPersons(
+                persons.map((person) =>
+                  person.id === alreadyExist.id ? response.data : person
+                )
+              );
+              setNewName("");
+              setNewNumber("");
+            })
+            .catch((error) => {
+              console.log("Error changing the phone number:", error);
+            });
+        }
       } else {
         const newPerson = { name: newName, number: newNumber };
         notesManager
@@ -41,18 +61,8 @@ const App = () => {
             setNewNumber("");
           })
           .catch((error) => {
-            console.error("Error adding person: ", error);
+            console.log("Error adding person: ", error);
           });
-      }
-    }
-    if (alreadyExist) {
-      const confirmed = window.confirm(
-        `${newName} is alredy added to the phonebook,replace the oled number with new?`
-      );
-      if (confirmed) {
-        notesManager.update(alreadyExist.id, confirmed).then((response) => {
-          setNewName;
-        });
       }
     }
   };
@@ -68,11 +78,6 @@ const App = () => {
         .catch((error) => console.error("Error deleting contact:", error));
     }
   };
-
-  //check if name exist
-  const alreadyExist = persons.find(function (person) {
-    return person.name === newName;
-  });
 
   const addName = (event) => {
     setNewName(event.target.value);
