@@ -45,6 +45,16 @@ const App = () => {
           });
       }
     }
+    if (alreadyExist) {
+      const confirmed = window.confirm(
+        `${newName} is alredy added to the phonebook,replace the oled number with new?`
+      );
+      if (confirmed) {
+        notesManager.update(alreadyExist.id, confirmed).then((response) => {
+          setNewName;
+        });
+      }
+    }
   };
 
   const handleDelete = (id) => {
@@ -58,6 +68,11 @@ const App = () => {
         .catch((error) => console.error("Error deleting contact:", error));
     }
   };
+
+  //check if name exist
+  const alreadyExist = persons.find(function (person) {
+    return person.name === newName;
+  });
 
   const addName = (event) => {
     setNewName(event.target.value);
