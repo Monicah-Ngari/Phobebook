@@ -100,18 +100,20 @@ const App = () => {
 
   return (
     <div className="App">
-      <h2>Phonebook</h2>
-      <Filter filterName={filterName} filterNames={filterNames} />
-      <h2>Add New</h2>
-      <PersonForm
-        newName={newName}
-        newNumber={newNumber}
-        addName={addName}
-        addNumber={addNumber}
-        nameInput={nameInput}
-      />
-      <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow} handleDelete={handleDelete} />
+      <div className="phone-frame">
+        <h2>Phonebook</h2>
+        <Filter filterName={filterName} filterNames={filterNames} />
+        <h2>Add New</h2>
+        <PersonForm
+          newName={newName}
+          newNumber={newNumber}
+          addName={addName}
+          addNumber={addNumber}
+          nameInput={nameInput}
+        />
+        <h2>Numbers</h2>
+        <Persons personsToShow={personsToShow} handleDelete={handleDelete} />
+      </div>
     </div>
   );
 };
