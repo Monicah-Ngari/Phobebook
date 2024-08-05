@@ -3,6 +3,7 @@ import Filter from "./Filter";
 import PersonForm from "./PersonForm";
 import Persons from "./Persons";
 import notesManager from "./services/note";
+import "./Styles.css";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -98,7 +99,7 @@ const App = () => {
     : [];
 
   return (
-    <div>
+    <div className="App">
       <h2>Phonebook</h2>
       <Filter filterName={filterName} filterNames={filterNames} />
       <h2>Add New</h2>
