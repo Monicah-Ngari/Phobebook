@@ -26,13 +26,15 @@
 
 .list-container {
     display: inline-block;
-    text-align: center;
+    display: block;
+    text-align: left;
+    padding: 10px;
 
 
 }
 
 ul {
-    list-style-position: none;
+    list-style: none;
     padding: 0;
     margin: 0 auto;
     width: 100%;
@@ -42,6 +44,15 @@ ul {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     background: #f5f5f5;
 
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
 }
 
 button {
