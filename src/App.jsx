@@ -54,7 +54,19 @@ const App = () => {
             });
         }
       } else {
-        const newPerson = { name: newName, number: newNumber };
+        let numericIds = persons
+          .map((p) => Number(p.id))
+          .filter((id) => !isNaN(id));
+        const newId =
+          numericIds.length > 0
+            ? (Math.max(...numericIds) + 1).toString()
+            : Date.now().toString();
+
+        const newPerson = {
+          id: newId,
+          name: newName,
+          number: newNumber,
+        };
         notesManager
           .create(newPerson)
           .then((response) => {
