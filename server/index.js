@@ -23,13 +23,13 @@ let persons = [
     number: "39-23-6423122",
   },
 ];
-app.get("/", (req, res) => {
+app.get("/", (_, res) => {
   res.send("<h1>Hello World!</h1>");
 });
-app.get("/api/persons", (req, res) => {
+app.get("/api/persons", (_, res) => {
   res.json(persons);
 });
-const PORT = 3000;
+const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`The app is running on port ${PORT}`);
 });
