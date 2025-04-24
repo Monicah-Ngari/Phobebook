@@ -1,4 +1,5 @@
-const express = require("express");
+import express from "express";
+// const express = require("express");
 const app = express();
 let persons = [
   {
@@ -22,3 +23,13 @@ let persons = [
     number: "39-23-6423122",
   },
 ];
+app.get("/", (req, res) => {
+  res.send("<h1>Hello World!</h1>");
+});
+app.get("/api/persons", (req, res) => {
+  res.json(persons);
+});
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`The app is running on port ${PORT}`);
+});
